@@ -7,10 +7,9 @@ const checkAuth = require("../middlewares/CheckAuth");
 router.get("/allNumberMonitors", (req, res) => {
   NumberMonitor.find({}, (err, data) => {
     if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(data);
-    }3
+      return res.status(500).send(err);
+    } 
+    res.status(200).send(data);
   });
 });
 
@@ -30,12 +29,9 @@ router.post("/addNumberMonitor", checkAuth, (req, res) => {
       .then((data) => {
         NumberMonitor.find({}, (err, data) => {
           if (err) {
-            res.status(500).send(err);
-          } else {
-            res
-              .status(201)
-              .send({ message: "Successfully created a new entry", data: data });
-          }
+            return res.status(500).send(err);
+          } 
+          res.status(201).send({ message: "Successfully created a new entry", data: data });
         });
       })
       .catch((err) => res.status(500).send({ message: err.message }));
@@ -59,12 +55,9 @@ router.put("/updateNumberMonitor/:id", checkAuth, (req, res) => {
     { new: true }, // To return the updated document
     (err, data) => {
       if (err) {
-        res.status(500).send(err);
-      } else {
-        res
-          .status(200)
-          .send({ message: "Successfully updated the entry", data: data });
-      }
+        return res.status(500).send(err);
+      } 
+      res.status(200).send({ message: "Successfully updated the entry", data: data });
     }
   );
 });

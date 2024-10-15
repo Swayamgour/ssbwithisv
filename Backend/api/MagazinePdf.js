@@ -9,10 +9,9 @@ const fs = require("fs");
 router.get("/allMagazinePdfs", (req, res) => {
   MagazinePdf.find({}, (err, data) => {
     if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(data);
+      return res.status(500).send(err);
     }
+    res.status(200).send(data);
   });
 });
 
@@ -22,12 +21,11 @@ router.get("/magazinePdf/:id", (req, res) => {
 
   MagazinePdf.findById(id, (err, data) => {
     if (err) {
-      res.status(500).send(err);
+      return res.status(500).send(err);
     } else if (!data) {
-      res.status(404).send({ message: "Magazine PDF not found" });
-    } else {
-      res.status(200).send(data);
+      return res.status(404).send({ message: "Magazine PDF not found" });
     }
+    res.status(200).send(data);
   });
 });
 
@@ -52,8 +50,12 @@ router.post("/addMagazinePdf", checkAuth, magazineUpload.fields([
       .then((data) => {
         res.status(201).send({ message: "Successfully uploaded Magazine PDF and image", data });
       })
-      .catch((err) => res.status(500).send({ message: err.message }));
+      .catch((err) => {
+        console.error("Error saving Magazine PDF:", err);
+        res.status(500).send({ message: err.message });
+      });
   } catch (error) {
+    console.error("Error during upload:", error);
     res.status(500).send({ message: error.message });
   }
 });
@@ -67,7 +69,6 @@ router.put("/updateMagazinePdf/:id", checkAuth, magazineUpload.fields([
   const id = req.params.id;
 
   try {
-    // Find the existing document
     const existingPdf = await MagazinePdf.findById(id);
     if (!existingPdf) {
       return res.status(404).send({ message: "Magazine PDF not found" });
@@ -79,9 +80,10 @@ router.put("/updateMagazinePdf/:id", checkAuth, magazineUpload.fields([
       fs.unlink(oldPdfPath, (err) => {
         if (err) {
           console.error("Error deleting old PDF:", err);
+          return res.status(500).send({ message: "Error deleting old PDF file", error: err.message });
         }
       });
-      existingPdf.pdfFilePath = req.files['magazinePdf'][0].path; // Update PDF path
+      existingPdf.pdfFilePath = req.files['magazinePdf'][0].path;
     }
 
     // Delete the old image file if a new one is uploaded
@@ -90,9 +92,10 @@ router.put("/updateMagazinePdf/:id", checkAuth, magazineUpload.fields([
       fs.unlink(oldImagePath, (err) => {
         if (err) {
           console.error("Error deleting old image:", err);
+          return res.status(500).send({ message: "Error deleting old image file", error: err.message });
         }
       });
-      existingPdf.magazineFrontImage = req.files['magazineFrontImage'][0].path; // Update image path
+      existingPdf.magazineFrontImage = req.files['magazineFrontImage'][0].path;
     }
 
     // Update the title
@@ -101,6 +104,7 @@ router.put("/updateMagazinePdf/:id", checkAuth, magazineUpload.fields([
     await existingPdf.save();
     res.status(200).send({ message: "Successfully updated the Magazine PDF and image", data: existingPdf });
   } catch (error) {
+    console.error("Error updating Magazine PDF:", error);
     res.status(500).send({ message: "An error occurred while updating the PDF and image", error: error.message });
   }
 });
@@ -121,6 +125,7 @@ router.delete("/deleteMagazinePdf/:id", checkAuth, async (req, res) => {
     fs.unlink(pdfFilePath, (err) => {
       if (err) {
         console.error("Error deleting PDF file:", err);
+        return res.status(500).send({ message: "Error deleting PDF file", error: err.message });
       }
     });
 
@@ -129,6 +134,7 @@ router.delete("/deleteMagazinePdf/:id", checkAuth, async (req, res) => {
     fs.unlink(imageFilePath, (err) => {
       if (err) {
         console.error("Error deleting image file:", err);
+        return res.status(500).send({ message: "Error deleting image file", error: err.message });
       }
     });
 
@@ -136,6 +142,7 @@ router.delete("/deleteMagazinePdf/:id", checkAuth, async (req, res) => {
     await MagazinePdf.findByIdAndDelete(id);
     res.status(200).send({ message: "Successfully deleted the Magazine PDF and image" });
   } catch (error) {
+    console.error("Error deleting Magazine PDF:", error);
     res.status(500).send({ message: "An error occurred while deleting the PDF and image", error: error.message });
   }
 });

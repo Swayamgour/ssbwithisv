@@ -5,15 +5,24 @@ const fetch = require("node-fetch");
 // Fast2SMS API Key (use env variable for security)
 const FAST2SMS_API_KEY = process.env.FAST2SMS_API_KEY;
 
-// sendOtp.js
+if (!FAST2SMS_API_KEY) {
+    console.error("Fast2SMS API key is not defined in environment variables.");
+}
 
+// Utility function for phone number validation
+const isValidPhoneNumber = (phoneNumber) => {
+    const phoneRegex = /^[0-9]{10}$/; // Simple regex for 10-digit numbers
+    return phoneRegex.test(phoneNumber);
+};
+
+// sendOtp.js
 router.post("/send-otp", async (req, res) => {
     const { phoneNumber } = req.body;
 
     // Log the incoming request to debug
     console.log("Received phone number:", phoneNumber);
 
-    if (!phoneNumber || phoneNumber.length !== 10) {
+    if (!phoneNumber || !isValidPhoneNumber(phoneNumber)) {
         return res.status(400).json({ success: false, message: "Invalid phone number" });
     }
 
@@ -37,8 +46,10 @@ router.post("/send-otp", async (req, res) => {
     try {
         const response = await fetch("https://www.fast2sms.com/dev/bulkV2", options);
         const data = await response.json();
-        console.log("data= ",data);
+        console.log("Response from Fast2SMS:", data);
+
         if (data.return) {
+            // Consider storing the OTP for verification later
             res.json({ success: true, message: "OTP sent successfully" });
         } else {
             res.status(400).json({ success: false, message: "Failed to send OTP" });
@@ -48,6 +59,5 @@ router.post("/send-otp", async (req, res) => {
         res.status(500).json({ success: false, message: "Server error" });
     }
 });
-
 
 module.exports = router;

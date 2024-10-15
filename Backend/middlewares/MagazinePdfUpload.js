@@ -6,12 +6,16 @@ const fs = require("fs");
 const uploadPdfDir = './uploads/magazine/pdf';
 const uploadImageDir = './uploads/magazine/images';
 
-if (!fs.existsSync(uploadPdfDir)) {
-  fs.mkdirSync(uploadPdfDir, { recursive: true });
-}
+try {
+  if (!fs.existsSync(uploadPdfDir)) {
+    fs.mkdirSync(uploadPdfDir, { recursive: true });
+  }
 
-if (!fs.existsSync(uploadImageDir)) {
-  fs.mkdirSync(uploadImageDir, { recursive: true });
+  if (!fs.existsSync(uploadImageDir)) {
+    fs.mkdirSync(uploadImageDir, { recursive: true });
+  }
+} catch (error) {
+  console.error("Error creating upload directories:", error);
 }
 
 // Multer configuration for saving Magazine PDFs and images
@@ -21,6 +25,8 @@ const storage = multer.diskStorage({
       cb(null, uploadPdfDir); // Save PDFs in the PDF directory
     } else if (file.mimetype.startsWith("image/")) {
       cb(null, uploadImageDir); // Save images in the images directory
+    } else {
+      cb(new Error("Unsupported file type.")); // Handle unsupported file types
     }
   },
   filename: (req, file, cb) => {
@@ -28,16 +34,19 @@ const storage = multer.diskStorage({
   },
 });
 
+// Multer upload configuration with size limit and enhanced error handling
 const magazineUpload = multer({
   storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // Limit files to 10MB
   fileFilter: (req, file, cb) => {
     const fileTypes = /pdf|jpeg|jpg|jfif|png/; // Allow PDF and image files (jpeg, jpg, png)
     const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
     const mimeType = fileTypes.test(file.mimetype);
+
     if (mimeType && extName) {
       return cb(null, true);
     } else {
-      cb("Only PDF and image files (jpeg, jpg, png) are allowed!");
+      return cb(new Error("Only PDF and image files (jpeg, jpg, png) are allowed!")); // More descriptive error
     }
   },
 });
