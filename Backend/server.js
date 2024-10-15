@@ -27,8 +27,14 @@ app.use("/api", sendOtp);
 app.use("/api", numberMonitor);
 app.use("/api", magzinePdf);
 app.use("/api", loginUsers);
-app.get("/", (req, res, err) => {
-  res.status(500).send(err);
+app.get("/", (req, res) => {
+  res.status(200).send("Welcome to the API");
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ message: "An internal server error occurred" });
 });
 
 //Connect to the DataBase
