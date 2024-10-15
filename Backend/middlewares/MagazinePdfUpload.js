@@ -1,0 +1,45 @@
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+
+// Ensure upload directories exist for both PDF and images
+const uploadPdfDir = './uploads/magazine/pdf';
+const uploadImageDir = './uploads/magazine/images';
+
+if (!fs.existsSync(uploadPdfDir)) {
+  fs.mkdirSync(uploadPdfDir, { recursive: true });
+}
+
+if (!fs.existsSync(uploadImageDir)) {
+  fs.mkdirSync(uploadImageDir, { recursive: true });
+}
+
+// Multer configuration for saving Magazine PDFs and images
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    if (file.mimetype === "application/pdf") {
+      cb(null, uploadPdfDir); // Save PDFs in the PDF directory
+    } else if (file.mimetype.startsWith("image/")) {
+      cb(null, uploadImageDir); // Save images in the images directory
+    }
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Save with a unique name
+  },
+});
+
+const magazineUpload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    const fileTypes = /pdf|jpeg|jpg|jfif|png/; // Allow PDF and image files (jpeg, jpg, png)
+    const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimeType = fileTypes.test(file.mimetype);
+    if (mimeType && extName) {
+      return cb(null, true);
+    } else {
+      cb("Only PDF and image files (jpeg, jpg, png) are allowed!");
+    }
+  },
+});
+
+module.exports = magazineUpload;

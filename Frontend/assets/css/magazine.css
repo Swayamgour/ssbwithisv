@@ -1,0 +1,200 @@
+.hero{
+    height: 60vh;
+  }
+  .mag-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: -96px;
+  }
+  .amazing-table-contents {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /* background-color: #f0f0f0; */
+    /* padding: 20px; */
+    /* border-radius: 10px; */
+    gap: 20px;
+    padding-left: 70px;
+    position: relative;
+    margin-top: 30px;
+  }
+  
+  .amazing-table-contents .topic {
+    background-color: #354e82;
+    color: white;
+    padding: 15px;
+    margin: 4px;
+    border-radius: 5px;
+    text-align: center;
+    width: 172px;
+    height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .amazing-table-contents .topic {
+        width: 100%; /* Full width on smaller screens */
+        height: auto; /* Let height adjust on smaller screens */
+    }
+  }
+  
+  .table-of-content-div{
+    position: absolute;
+    left: -52px;
+    /* width: 100%; */
+    text-align: center;
+    /* border: 1px solid red; */
+    top: 54px;
+    transform: rotate(-90deg);
+    padding: 21px;
+    background: #000080;
+    color: white;
+  }
+  .container.all-magzine-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 31px;
+    border: 1px solid #d4d4d4;
+    margin-bottom: 36px;
+}
+
+/* Magazine Card Styling */
+.magzine-card {
+    background: #ffffff;
+    /* border-radius: 12px; */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    width: 280px;
+    border-top-left-radius: 12px;
+}
+
+.magzine-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Image Styling */
+.magzine-img img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.magzine-card:hover .magzine-img img {
+    transform: scale(1.1);
+}
+
+/* Download Button Styling */
+.magzine-download-button {
+    background-color: #000080;
+    color: #ffffff;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    /* border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px; */
+}
+
+.magzine-download-button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container.all-magzine-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .magzine-card {
+        width: 100%;
+    }
+}
+.heading-amaze{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 3em;
+}
+.magzine-number{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #000080;
+    color: white;
+    padding: 7px;
+}
+.magzine-download-button a{
+    color: #FFD700;
+}
+
+#otp-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+#otp-modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 87px;
+    border: 1px solid #888;
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    position: relative;
+}
+#otp-modal-content h2{
+    font-size: 20px;
+}
+
+#otp-modal-content button{
+    background: #000080;
+    color: #FFD700;
+
+}
+.close {
+    color: #ff1d1d;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 23px;
+    right: 37px;
+}
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+#otp-section {
+    display: none;
+}
+
+@media screen and (max-width:850px) {
+    #otp-modal-content {
+        width: auto;
+        height: 100%;
+        justify-content: center;
+        padding: 20px;
+    }
+}

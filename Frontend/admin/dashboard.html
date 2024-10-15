@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  
+  <link rel="stylesheet" href="./assets/css/dashboard.css" />
+  <link rel="stylesheet" href="./assets/css/admin-header.css" />
+</head>
+<body>
+  <header class="admin-dashboard-navbar">
+
+    <div class="admin-dashboard-left">
+      <img src="./assets/imgs/admin-img.jpg" alt="Admin Image" class="admin-dashboard-image">
+     Hi Admin;👋🏻
+    </div>
+    <div class="admin-dashboard-right">
+      <a href="./dashboard.html" class="admin-dashboard-link active">DashBoard</a>
+      <a href="./magazine.html" class="admin-dashboard-link">Magazine</a>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </header>
+  <div class="container">
+   
+
+
+    <h2>All Number Monitor Entries</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Officer Selection</th>
+          <th>Year of Service</th>
+          <th>Faculty Experience</th>
+          <th>Total Faculty</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="numberMonitorTableBody"></tbody>
+    </table>
+  </div>
+  <script src="./assets/js/admin-header.js"></script>
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/dashboard.js"></script>
+</body>
+</html>

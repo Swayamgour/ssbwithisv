@@ -1,0 +1,47 @@
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS specific files (macOS, Windows)
+.DS_Store
+Thumbs.db
+
+# General dependency directories (Node.js)
+node_modules/
+
+# Frontend specific ignores
+Frontend/node_modules/
+Frontend/.next/        # For Next.js (if used)
+Frontend/dist/         # For other frameworks like Vue, React (build folder)
+Frontend/build/        # For React build
+Frontend/out/          # Static export folder (Next.js)
+
+# Backend specific ignores
+Backend/node_modules/
+Backend/dist/          # For built files (e.g., TypeScript to JS)
+Backend/build/         # If you're using a build folder in your Backend
+Backend/.cache/        # For any caching directories (optional)
+
+# TypeScript (if applicable to either Frontend or Backend)
+*.tsbuildinfo
+
+# IDE specific settings
+.vscode/
+.idea/
+
+# Linting tools
+.eslintcache
+
+# Lock files (optional)
+package-lock.json
+yarn.lock
