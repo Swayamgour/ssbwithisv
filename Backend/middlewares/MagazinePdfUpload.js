@@ -39,14 +39,14 @@ const magazineUpload = multer({
   storage: storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // Limit files to 10MB
   fileFilter: (req, file, cb) => {
-    const fileTypes = /pdf|jpeg|jpg|jfif|png/; // Allow PDF and image files (jpeg, jpg, png)
+    const fileTypes = /pdf|jpeg|jpg|svg|jfif|png/; // Allow PDF and image files (jpeg, jpg, png)
     const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
     const mimeType = fileTypes.test(file.mimetype);
 
     if (mimeType && extName) {
       return cb(null, true);
     } else {
-      return cb(new Error("Only PDF and image files (jpeg, jpg, png) are allowed!")); // More descriptive error
+      return cb(new Error("Only PDF and image files (jpeg, svg, jpg, png) are allowed!")); // More descriptive error
     }
   },
 });

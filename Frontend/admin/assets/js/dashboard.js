@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
       facultyExperience,
       totalFaculty,
     };
-
+console.log("id= ",id)
     const response = await fetch(`${config.backendBaseUrl}/api/updateNumberMonitor/${id}`, {
       method: 'PUT',
       headers: {
