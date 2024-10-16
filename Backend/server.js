@@ -28,7 +28,7 @@ app.use("/api", sendOtp);
 app.use("/api", numberMonitor);
 app.use("/api", magazinePdf);
 app.use("/api", loginUsers);
-
+app.use('/uploads', express.static(__dirname + '/uploads'));
 app.get("/", (req, res) => {
     res.status(200).send("Welcome to the API");
 });
