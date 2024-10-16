@@ -18,10 +18,10 @@ const fetchMagazinePdfs = async () => {
             card.innerHTML = `
                 <div class="magzine-number">${pdf.pdfTitle}</div>
                 <div class="magzine-img">
-                    <img src="../../Backend/${pdf.magazineFrontImage}" alt="${pdf.pdfTitle}" />
+                    <img src="${config.backendBaseUrl}/${pdf.magazineFrontImage}" alt="${pdf.pdfTitle}" />
                 </div>
                 <div class="magzine-download-button">
-                    <button class="download-btn" data-url="../../Backend/${pdf.pdfFilePath}">Download Magazine</button>
+                    <button class="download-btn" data-url="${config.backendBaseUrl}/${pdf.pdfFilePath}">Download Magazine</button>
                 </div>
             `;
             magazineListContainer.appendChild(card);

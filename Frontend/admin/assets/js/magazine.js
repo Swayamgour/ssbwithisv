@@ -19,8 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${pdf.pdfTitle}</td>
-                    <td><img src="../../Backend/${pdf.magazineFrontImage}" alt="Cover Image" style="width:100px;"/></td>
-                    <td><a href="../../Backend/${pdf.pdfFilePath}" target="_blank">View PDF</a></td>
+                    <td><img src="${config.backendBaseUrl}/${pdf.magazineFrontImage}" alt="Cover Image" style="width:100px;"/></td>
+                    <td><a href="${config.backendBaseUrl}/${pdf.pdfFilePath}" target="_blank">View PDF</a></td>
                     <td>
                         <button onclick="editMagazinePdf('${pdf._id}', '${pdf.pdfTitle}')">Edit</button>
                         <button onclick="deleteMagazinePdf('${pdf._id}')">Delete</button>
@@ -33,113 +33,118 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Upload new Magazine PDF and Cover Image
-    uploadPdfForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
+// Show overlay spinner
+function showSpinner() {
+    document.getElementById("overlay").style.display = "block";
+}
 
-        const formData = new FormData();
-        formData.append("pdfTitle", document.getElementById("pdfTitle").value);
-        formData.append("magazinePdf", document.getElementById("magazinePdf").files[0]);
-        formData.append("magazineFrontImage", document.getElementById("magazineImage").files[0]);
+// Hide overlay spinner
+function hideSpinner() {
+    document.getElementById("overlay").style.display = "none";
+}
 
+// Upload new Magazine PDF and Cover Image
+uploadPdfForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    showSpinner(); // Show spinner when the form is submitted
+
+    const formData = new FormData();
+    formData.append("pdfTitle", document.getElementById("pdfTitle").value);
+    formData.append("magazinePdf", document.getElementById("magazinePdf").files[0]);
+    formData.append("magazineFrontImage", document.getElementById("magazineImage").files[0]);
+
+    try {
+        const response = await fetch(`${config.backendBaseUrl}/api/addMagazinePdf`, {
+            method: "POST",
+            headers: {
+                'token': `Bearer ${token}`
+            },
+            body: formData,
+        });
+
+        const responseText = await response.text();
+        // console.log("Response Text: ", responseText);
+
+        let result;
         try {
-            const response = await fetch(`${config.backendBaseUrl}/api/addMagazinePdf`, {
-                method: "POST",
-                headers: {
-                    'token': `Bearer ${token}` // No need for 'Content-Type'
-                },
-                body: formData,
-            });
-
-            const responseText = await response.text();
-            console.log("Response Text: ", responseText);
-
-            let result;
-            try {
-                result = JSON.parse(responseText);
-            } catch (err) {
-                console.error("Failed to parse response as JSON", err);
-                throw new Error("Received unexpected response format");
-            }
-
-            if (response.ok) {
-                alert("PDF and Image uploaded successfully!");
-                fetchMagazinePdfs(); // Refresh entries after upload
-                uploadPdfForm.reset(); // Clear form
-            } else {
-                alert(result.message || "Failed to upload PDF and Image");
-            }
-        } catch (error) {
-            alert("An error occurred while uploading the PDF and Image");
-            console.error("Error:", error);
+            result = JSON.parse(responseText);
+        } catch (err) {
+            console.error("Failed to parse response as JSON", err);
+            throw new Error("Received unexpected response format");
         }
-    });
 
-    // Edit Magazine PDF and Image
-   // Function to open the edit modal
+        if (response.ok) {
+            alert("PDF and Image uploaded successfully!");
+            fetchMagazinePdfs(); // Refresh entries after upload
+            uploadPdfForm.reset(); // Clear form
+        } else {
+            alert(result.message || "Failed to upload PDF and Image");
+        }
+    } catch (error) {
+        alert("An error occurred while uploading the PDF and Image");
+        console.error("Error:", error);
+    } finally {
+        hideSpinner(); // Hide the spinner after the process completes
+    }
+});
+
+// Edit Magazine PDF and Image
 window.editMagazinePdf = (id, currentTitle) => {
-    // Populate the form fields with current values
     document.getElementById("newTitle").value = currentTitle;
 
-    // Show the modal
     const modal = document.getElementById("editMagazineModal");
     modal.style.display = "block";
 
-    // Close the modal when the user clicks on <span> (x)
     document.querySelector(".close-button").onclick = () => {
         modal.style.display = "none";
     };
 
-    // Close the modal when the user clicks anywhere outside of the modal
     window.onclick = (event) => {
         if (event.target == modal) {
             modal.style.display = "none";
         }
     };
 
-    // Handle form submission
     document.getElementById("editMagazineForm").onsubmit = async (event) => {
-        event.preventDefault(); // Prevent form from submitting normally
+        event.preventDefault();
+        showSpinner(); // Show spinner when update form is submitted
 
         const newTitle = document.getElementById("newTitle").value;
         const selectedFile = document.getElementById("newmagazinePdf").files[0];
         const selectedImage = document.getElementById("newmagazineImage").files[0];
 
-        // Create FormData object
         const formData = new FormData();
-        formData.append("pdfTitle", newTitle); // Add the new title
-        if (selectedFile) {
-            formData.append("magazinePdf", selectedFile); // Add new PDF file
-        }
-        if (selectedImage) {
-            formData.append("magazineFrontImage", selectedImage); // Add new Image file
-        }
+        formData.append("pdfTitle", newTitle);
+        if (selectedFile) formData.append("magazinePdf", selectedFile);
+        if (selectedImage) formData.append("magazineFrontImage", selectedImage);
 
         try {
-            // Send the updated data to the server
             const response = await fetch(`${config.backendBaseUrl}/api/updateMagazinePdf/${id}`, {
                 method: "PUT",
                 headers: {
-                    'token': `Bearer ${token}`, // Token for authorization
+                    'token': `Bearer ${token}`,
                 },
-                body: formData, // Send the form data
+                body: formData,
             });
 
             const result = await response.json();
 
             if (response.ok) {
                 alert("Magazine updated successfully!");
-                fetchMagazinePdfs(); // Refresh the list after update
-                modal.style.display = "none"; // Close the modal
+                fetchMagazinePdfs(); // Refresh list
+                modal.style.display = "none"; // Close modal
             } else {
                 alert(result.message || "Failed to update Magazine");
             }
         } catch (error) {
             alert("An error occurred while updating the magazine");
             console.error("Error:", error);
+        } finally {
+            hideSpinner(); // Hide the spinner after the process completes
         }
     };
 };
+
 
     
 
