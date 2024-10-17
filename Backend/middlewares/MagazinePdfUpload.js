@@ -37,7 +37,7 @@ const storage = multer.diskStorage({
 // Multer upload configuration with size limit and enhanced error handling
 const magazineUpload = multer({
   storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // Limit files to 10MB
+  limits: { fileSize: 100 * 1024 * 1024 }, // Limit files to 10MB
   fileFilter: (req, file, cb) => {
     const fileTypes = /pdf|jpeg|jpg|svg|jfif|png/; // Allow PDF and image files (jpeg, jpg, png)
     const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
