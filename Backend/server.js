@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
     origin: process.env.CLIENT_URL, // Set your frontend URL
     methods: ["GET", "POST", "DELETE", "PUT"],
-    allowedHeaders: ["Content-Type", "token", "authorization"],
+    allowedHeaders: ["Content-Type", "token", "authorization", "Authorization"],
     credentials: true,
 }));
 

@@ -82,7 +82,7 @@ uploadPdfForm.addEventListener("submit", async (e) => {
         }
     } catch (error) {
         alert("An error occurred while uploading the PDF and Image");
-        console.error("Error:", error);
+        console.error("Error of Upload:", error);
     } finally {
         hideSpinner(); // Hide the spinner after the process completes
     }
