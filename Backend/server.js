@@ -28,6 +28,8 @@ app.use("/api", sendOtp);
 app.use("/api", numberMonitor);
 app.use("/api", magazinePdf);
 app.use("/api", loginUsers);
+app.use(bodyParser.json({ limit: '100mb' })); 
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use('/uploads', express.static(__dirname + '/uploads'));

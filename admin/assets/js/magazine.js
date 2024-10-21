@@ -54,7 +54,7 @@ uploadPdfForm.addEventListener("submit", async (e) => {
     formData.append("magazineFrontImage", document.getElementById("magazineImage").files[0]);
 
     try {
-        const response = await fetch(`${config.backendBaseUrl}/api/addMagazinePdf`, { mode: 'no-cors'}, {
+        const response = await fetch(`${config.backendBaseUrl}/api/addMagazinePdf`, {
             method: "POST",
             headers: {
                 'token': `Bearer ${token}`
