@@ -20,9 +20,9 @@ const fetchMagazinePdfs = async () => {
                 <div class="magzine-img">
                     <img src="${config.backendBaseUrl}/${pdf.magazineFrontImage}" alt="${pdf.pdfTitle}" />
                 </div>
-                <div class="magzine-download-button">
-                    <button class="download-btn" data-url="${config.backendBaseUrl}/${pdf.pdfFilePath}">Download Magazine</button>
-                </div>
+               
+                    <div class="download-btn magzine-download-button" data-url="${config.backendBaseUrl}/${pdf.pdfFilePath}">Download Magazine</div>
+              
             `;
             magazineListContainer.appendChild(card);
         });
@@ -60,12 +60,25 @@ const openOtpModal = (url) => {
 closeModal.onclick = () => {
     modal.style.display = "none";
 };
-
-
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple regex for email validation
+    return emailRegex.test(email);
+}
 // Send OTP using the backend API
 sendOtpButton.onclick = async () => {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
     const phoneNumber = document.getElementById("phone-number").value;
     
+    // Validate inputs
+    if (!name || !email || !phoneNumber) {
+        alert("Please fill in all fields.");
+        return;
+    }
+    if (!isValidEmail(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
     if (!phoneNumber || phoneNumber.length !== 10) {
         alert("Please enter a valid 10-digit phone number.");
         return;
@@ -93,11 +106,13 @@ sendOtpButton.onclick = async () => {
     }
 };
 
-
 // Verify OTP and allow download
 document.getElementById("otp-form").onsubmit = async (e) => {
     e.preventDefault();
     const enteredOtp = document.getElementById("otp").value;
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phoneNumber = document.getElementById("phone-number").value;
 
     try {
         const response = await fetch(`${config.backendBaseUrl}/api/verify-otp`, {
@@ -110,7 +125,16 @@ document.getElementById("otp-form").onsubmit = async (e) => {
 
         const data = await response.json();
         if (data.success) {
-            alert("OTP verified successfully.");
+            // If OTP is verified, send user details to backend
+            await fetch(`${config.backendBaseUrl}/api/add-user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ name, email, phoneNumber }), // Send name, email, and phone number
+            });
+
+            alert("OTP verified and user details saved successfully.");
             window.open(downloadUrl, "_blank"); // Proceed with the download
             modal.style.display = "none"; // Close modal
         } else {
