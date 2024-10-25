@@ -33,9 +33,33 @@ const fetchMagazinePdfs = async () => {
         document.querySelectorAll(".download-btn").forEach(button => {
             button.addEventListener("click", (e) => {
                 e.preventDefault();
-                openOtpModal(button.dataset.url);
+                
+                // Check if download access is allowed
+                const downloadAccess = localStorage.getItem("downloadAccess");
+                const accessDate = localStorage.getItem("accessDate");
+                
+                if (downloadAccess === "true" && accessDate) {
+                    const now = new Date();
+                    const accessTime = new Date(accessDate);
+                    
+                    // Check if a month has passed
+                    const monthPassed = (now.getTime() - accessTime.getTime()) >= (30 * 24 * 60 * 60 * 1000);
+                    
+                    if (monthPassed) {
+                        // Clear the access if a month has passed
+                        localStorage.removeItem("downloadAccess");
+                        localStorage.removeItem("accessDate");
+                        openOtpModal(button.dataset.url);
+                    } else {
+                        // Allow direct download
+                        window.open(button.dataset.url, "_blank");
+                    }
+                } else {
+                    openOtpModal(button.dataset.url); // Show OTP modal if no access
+                }
             });
         });
+        
     } else {
         alert("Failed to fetch magazine PDFs");
     }
@@ -180,6 +204,9 @@ document.getElementById("otp-form").onsubmit = (e) => {
                 allInput.forEach(input=>{
                   input.value=''
                 })
+                const currentDate = new Date();
+                localStorage.setItem("downloadAccess", "true");
+                localStorage.setItem("accessDate", currentDate.toISOString());
             })
             .catch(error => {
                 console.error('Error verifying access token:', error);

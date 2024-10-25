@@ -2104,3 +2104,28 @@ section,
   padding-right: 7px;
   padding-top: 4px;
 }
+
+.header-mentoring{
+  background: #5e5eb2;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ece6ff;
+  height: 27px;
+  font-weight: 500;
+  font-family: 'Roboto';
+  font-style: oblique;
+  position: fixed;
+  top: 102px;
+  text-align: center;
+  z-index: 1000;
+}
+@media screen and (max-width:1200px) {
+  .header-mentoring {
+    height: 92px;
+    bottom: 0;
+    z-index: 120;
+    top: auto;
+}
+}
