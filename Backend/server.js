@@ -5,9 +5,12 @@ const morgan = require("morgan"); // For logging
 const numberMonitor = require("./api/NumberMonitor");
 const magazinePdf = require("./api/MagazinePdf");
 const loginUsers = require("./api/Login");
-const sendOtp = require("./api/SendOtp");
+const sendEmail = require("./api/SendEmail");
+const verifyOtp = require("./api/VerifyOtp");
+const leads= require("./api/Leads");
 const { connectDB } = require("./config/database");
 const cookieParser = require("cookie-parser");
+const {Lead}=require("./model/LeadDetails");
 
 const app = express();
 
@@ -24,10 +27,13 @@ app.use(cors({
 }));
 
 // Middleware: Connecting different Routes
-app.use("/api", sendOtp);
+app.use("/api", verifyOtp);
 app.use("/api", numberMonitor);
 app.use("/api", magazinePdf);
 app.use("/api", loginUsers);
+app.use("/api", sendEmail);
+app.use("/api", leads);
+
 // app.use(bodyParser.json({ limit: '100mb' })); 
 // app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use(express.json({ limit: '100mb' }));

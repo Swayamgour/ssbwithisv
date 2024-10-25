@@ -17,20 +17,23 @@ function updateVisibleCards() {
     } else {
         visibleCards = 3;
     }
-
+if(carouselCards)
+{
     // Update cardWidth based on the current visibleCards
     cardWidth = carouselCards.children[0].offsetWidth+20
 
     // Adjust the starting position of the carousel
     currentIndex = visibleCards;
-    carouselCards.style.transform = `translateX(-${cardWidth * currentIndex}px)`;
+    carouselCards.style.transform = `translateX(-${cardWidth * currentIndex}px)`;    
+}
+
 }
 
 function updateCarousel() {
     const offset = -currentIndex * cardWidth;
     if(carouselCards)
     {
-        carouselCards.style.transition = 'transform 0.3s ease';
+    carouselCards.style.transition = 'transform 0.3s ease';
     carouselCards.style.transform = `translateX(${offset}px)`;   
     }
  
@@ -53,7 +56,7 @@ function checkIndex() {
 // Event listeners for the buttons
 if(prevButton)
 {
- prevButton.addEventListener('click', () => {
+ prevButton?.addEventListener('click', () => {
     console.log("ok")
     currentIndex--;
     updateCarousel();
@@ -77,22 +80,26 @@ window.addEventListener('load', () => {
     updateVisibleCards();
 
     // Clone all cards to create a 1-10-1-10-1-10 sequence
-    const totalCards = carouselCards.children.length;
+    if(carouselCards)
+    {
+        const totalCards = carouselCards.children.length;
 
-    const originalCards = Array.from(carouselCards.children);
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true))); // Clone 1-10
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true))); // Clone 1-10 again
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
-    originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
-    currentIndex = totalCards; // Set the currentIndex to the first actual item after cloning
-    carouselCards.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+        const originalCards = Array.from(carouselCards.children);
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true))); // Clone 1-10
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true))); // Clone 1-10 again
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
+        originalCards.forEach(card => carouselCards.appendChild(card.cloneNode(true)));
+        currentIndex = totalCards; // Set the currentIndex to the first actual item after cloning
+        carouselCards.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+    }
+   
 });
 
 // Update visible cards on window resize
@@ -125,7 +132,7 @@ function countUp(element) {
 
 function handleScroll() {
     const section = document.getElementById('number-changer-achievement');
-    const sectionTop = section.getBoundingClientRect().top;
+    const sectionTop = section?.getBoundingClientRect().top;
     const windowHeight = window.innerHeight;
 
     if (sectionTop < windowHeight) {

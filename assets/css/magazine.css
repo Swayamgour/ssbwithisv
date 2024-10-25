@@ -144,23 +144,33 @@
 
 #otp-modal {
     display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.4);
+    /* display: flex; */
+    position: fixed;
+    flex-direction: column;
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    background: rgba(33, 37, 40, .95);
+    inset: 0 !important;
 }
 #otp-modal-content {
-    background-color: #fff;
+    background-color: rgb(255, 238, 238);
     margin: 15% auto;
     padding: 87px;
     border: 1px solid #888;
     width: 55%;
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 28px;
+    justify-content: center;
+    position: relative;
+    align-items: center;
+    transition: all .5s ease;
+    box-shadow: 0 11px 15px -7px #0003, 0 24px 38px 3px #00000024, 0 9px 46px 8px #0000001f;
+    background: #ffffff;
+    border-radius: 10px;
     position: relative;
 }
 #otp-modal-content h2{
@@ -168,8 +178,18 @@
 }
 
 #otp-modal-content button{
-    background: #000080;
+    background: #1157a6;
     color: #FFD700;
+    padding: 5px;
+    border: 1px solid;
+    width: 100%;
+    text-align: center;
+    /* width: 49%; */
+    margin-top: 12px;
+    border-radius: 4px;
+    font-weight: 500;
+    color: white;
+    
 
 }
 .close {
@@ -188,8 +208,14 @@
 }
 #otp-section {
     display: none;
+    flex-direction: column;
+    gap: 18px;
+    align-items: center;
+    width: 100%;
 }
-
+#otp-section form{
+    width: 100%;
+}
 @media screen and (max-width:850px) {
     #otp-modal-content {
         width: auto;
@@ -197,4 +223,93 @@
         justify-content: center;
         padding: 20px;
     }
+}
+
+.heading-phone-number-sent{
+    font-size: 18px;
+    color:  #3f4346;;
+    font-weight: 400;
+}
+.phoneNumberDynamic{
+    font-weight: 700;
+    color: #525872;
+}
+#otp-modal h3,
+#otp-modal h2
+{
+color: white;
+}
+
+.otp-error-message{
+    color: red;
+    font-weight: 700;
+}
+.Whatsapp-color{
+    color: #1157a6;
+    font-weight: 500;
+}
+.sent-otp-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+}
+input{
+    padding: 5px;
+    /* background: #000080; */
+    color: black;
+    border: 2px solid #e4e4e4;
+    border-radius: 3px;
+    width: 100%;
+}
+.sent-otp-only-div{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 6px;
+    align-items: center;
+}
+input::placeholder {
+    color: #a3a3a3; /* Change this to your desired color */
+    opacity: 1; /* Optional: Ensures the color appears fully */
+}
+.sent-otp-div div{
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 21px;
+    color: #3f4346;
+}
+
+#otp-form #otp{
+    text-align: center;
+}
+
+.resend-via-sms,.resend-via-wp{
+    cursor: pointer;
+    color: #1157a6 !important;
+    font-weight: 500;
+    padding: 0 4px;
+    font-size: 12px;
+    text-decoration: underline;
+}
+.after-retry-clicked{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    flex-direction: column;
+    margin-top: 18px;
+    margin-bottom: 8px;
+}
+.retry-sec{
+    text-align: center;
+    font-size: 12px;
+    margin-top: 7px;
+   
+}
+.retry-seconds-val{
+    font-weight: 500;
+    color: #1157a6;
 }
