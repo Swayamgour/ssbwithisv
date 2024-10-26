@@ -96,7 +96,7 @@
         <!-- Full-width Contact Form -->
         <div class="form-wrapper" style="margin-bottom: 50px;">
           <h4 class="drop-ur-msg">Drop Your Message</h4>
-          <form  method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+          <form  id="contactForm" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
             <div class="row gy-4">
 
               <div class="col-md-6">
@@ -106,7 +106,9 @@
               <div class="col-md-6">
                 <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
               </div>
-
+              <div class="col-md-12">
+                <input type="text" class="form-control" name="phone" placeholder="Your Mobile Number"  maxlength="10" required="">
+              </div>
               <div class="col-md-12">
                 <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
               </div>
@@ -275,6 +277,7 @@
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
 
   <!-- Main JS File -->
+  <script src="./admin/assets/js/config.js"></script>
   <script src="assets/js/main.js"></script>
   <script src="assets/js/contact.js"></script>
 </body>

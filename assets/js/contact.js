@@ -1,4 +1,4 @@
-document.getElementById("contactForm").addEventListener("submit", async function (e) {
+document.getElementById("contactForm")?.addEventListener("submit", async function (e) {
     e.preventDefault(); // Prevent traditional form submission
     
     // Display loading indicator
@@ -8,12 +8,13 @@ document.getElementById("contactForm").addEventListener("submit", async function
     const formData = {
         name: e.target.name.value,
         email: e.target.email.value,
+        phone: e.target.phone.value,
         subject: e.target.subject.value,
         message: e.target.message.value
     };
-
+     console.log(formData)
     try {
-        const response = await fetch("/api/send-email", {
+        const response = await fetch(`${config.backendBaseUrl}/api/send-email`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

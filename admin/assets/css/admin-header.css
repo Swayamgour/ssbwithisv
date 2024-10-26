@@ -48,7 +48,7 @@ body {
   }
   
   .admin-dashboard-link:hover {
-    color: #f0c040;
+   color: white;
   }
   
   /* Responsive Styles */
@@ -90,7 +90,7 @@ body {
   }
 
   .active{
-    color: white;
+    color: #f0c040;
   }
   #logoutBtn {
     background-color: #dc3545;

@@ -4,13 +4,16 @@ const { Lead } = require("../model/LeadDetails");
 
 // Get all Lead entries
 router.get("/allLeads", (req, res) => {
-  Lead.find({}, (err, data) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.status(200).send(data);
-  });
+  Lead.find({})
+    .sort({ date: -1, time: -1 })  // Sorting by date and time in descending order
+    .exec((err, data) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      res.status(200).send(data);
+    });
 });
+
 
 // Add a new Lead entry
 router.post("/addLead",(req, res) => {

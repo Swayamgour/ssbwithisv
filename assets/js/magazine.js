@@ -123,10 +123,14 @@ const configuration = {
 };
 
 // Send OTP using MSG91
+let otpSenderName='', otpSenderEmail='',otpSenderPhone=''
 sendOtpButton.onclick = () => {
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const phoneNumber = document.getElementById("phone-number").value;
+    otpSenderName=name;
+    otpSenderEmail=email
+    otpSenderPhone=phoneNumber
     let formattedPhoneNumber = phoneNumber;
     // Validate inputs
     if (!name || !email || !phoneNumber) {
@@ -173,7 +177,8 @@ sendOtpButton.onclick = () => {
 document.getElementById("otp-form").onsubmit = (e) => {
     e.preventDefault();
     const enteredOtp = document.getElementById("otp").value;
-        otpErrorMsg.innerHTML=``
+    otpErrorMsg.innerHTML = ``;
+    
     window.verifyOtp(enteredOtp, 
         (data) => {
             console.log('OTP verified:', data.message);
@@ -195,31 +200,61 @@ document.getElementById("otp-form").onsubmit = (e) => {
             })
             .then(data => {
                 console.log('Access token verified:', data);
-                alert('OTP verified and access token confirmed!');
-                console.log("url=",downloadUrl)
-                modal.style.display = "none";
-                window.open(downloadUrl, "_blank"); // Download magazine
-                modal.style.display = "none"; // Close modal
-                const allInput=  document.querySelectorAll('input');
-                allInput.forEach(input=>{
-                  input.value=''
+                
+                // Now send user data to the backend API after OTP is verified
+                const userData = {
+                    name: otpSenderName,  // Assuming these fields are present in your form
+                    email: otpSenderEmail,
+                    phoneNumber: otpSenderPhone
+                };
+                
+                fetch(`${config.backendBaseUrl}/api/addLead`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData),
                 })
-                const currentDate = new Date();
-                localStorage.setItem("downloadAccess", "true");
-                localStorage.setItem("accessDate", currentDate.toISOString());
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('User data sent:', data);
+                    alert('OTP Successfully verified');
+                    
+                    modal.style.display = "none";
+                    window.open(downloadUrl, "_blank"); // Download magazine
+                    
+                    const allInput = document.querySelectorAll('input');
+                    allInput.forEach(input => {
+                      input.value = '';
+                    });
+                    
+                    const currentDate = new Date();
+                    localStorage.setItem("downloadAccess", "true");
+                    localStorage.setItem("accessDate", currentDate.toISOString());
+                })
+                .catch(error => {
+                    console.error('Error creating lead:', error);
+                    otpErrorMsg.innerHTML = `Error creating lead.`;
+                });
+                
             })
             .catch(error => {
                 console.error('Error verifying access token:', error);
-             otpErrorMsg.innerHTML=`Error verifying access token.`
+                otpErrorMsg.innerHTML = `Error verifying access token.`;
             });
         },
         (error) => {
             console.log('OTP verification failed:', error);
-            otpErrorMsg.innerHTML=`Invalid OTP. Please try again.`
-            // alert('Invalid OTP. Please try again.');
+            otpErrorMsg.innerHTML = `Invalid OTP. Please try again.`;
         }
     );
 };
+
 
 // Retry OTP
 retryOtpButtonSms.onclick = () => {
