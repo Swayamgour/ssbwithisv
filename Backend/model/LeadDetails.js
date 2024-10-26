@@ -1,11 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
-// Helper function to format time
-const getCurrentTime = () => {
-  const date = new Date();
-  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-};
+
 
 const leadSchema = new mongoose.Schema({
   name: {
@@ -26,7 +22,7 @@ const leadSchema = new mongoose.Schema({
   },
   time: {
     type: String,
-    default: getCurrentTime,  // Automatically sets the current time
+    default: new Date().toLocaleTimeString(), // 11:18:48 AM,  // Automatically sets the current time
   },
 });
 
