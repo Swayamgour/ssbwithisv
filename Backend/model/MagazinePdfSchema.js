@@ -19,9 +19,9 @@ const magazinePdfSchema = new mongoose.Schema({
   },
   tags: {
     type: String,
-    enum: ["Magazine", "Books", "SSB Prep"],
+    enum: ["Magazine", "Books", "SSBPrep"],
     required: true,
-  }
+  },
 });
 
 const MagazinePdf = mongoose.model("MagazinePdf", magazinePdfSchema);
